@@ -17,7 +17,7 @@
 			Web tool to reverse engineer saved game files. For games that use SIMPLE, BINARY saved game formats. This tool will do diffs, labeling, etc.
 		</p>
 		<p>
-			<strong>Saved Game File 1:</strong><br />
+			<strong>Saved Game File 1:</strong> (Hint: use drag and drop)<br />
 			<input id="binary1" type="file" name="binary1" />
 		</p>
 		<p>
