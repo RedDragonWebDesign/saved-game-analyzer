@@ -4,7 +4,7 @@ class SaveStructure {
 	file1ByteArray;
 	file2ByteArray;
 	saveStructure = {
-		'structures': [],
+		'fields': [],
 		'totalLength': '',
 		'defaultByteArray': [],
 	};
@@ -45,7 +45,7 @@ class SaveStructure {
 	}
 	
 	addToStructure(data) {
-		this.saveStructure.structures.push(data);
+		this.saveStructure.fields.push(data);
 	}
 	
 	getStructure() {
@@ -89,7 +89,6 @@ class SaveStructure {
 			'firstOffset': offset,
 			'firstLength': 1,
 			'firstType': 'int',
-			// 'firstDefault': '',
 			'firstRangeMin': '',
 			'firstRangeMax': '',
 		};
@@ -103,7 +102,7 @@ class SaveStructure {
 					offset = 'Hex: ' + hex + ' Int: ' + int;
 					
 					if ( startOfFirstOccurrence ) {
-						data.firstOffset = hex;
+						data.firstOffset = int;
 						
 						startOfFirstOccurrence = false;
 					}

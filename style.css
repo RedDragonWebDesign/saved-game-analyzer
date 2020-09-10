@@ -26,3 +26,12 @@ input[type="text"] {
 .wrap {
 	white-space: normal;
 }
+
+.label-this-region {
+	display: flex;
+	justify-content: space-between;
+}
+
+select {
+	width: 150px;
+}
