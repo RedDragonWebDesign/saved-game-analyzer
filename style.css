@@ -19,6 +19,10 @@ strong {
 	text-decoration: underline;
 }
 
-.file-picker {
-	display: none;
+input[type="text"] {
+	width: 300px;
+}
+
+.wrap {
+	white-space: normal;
 }

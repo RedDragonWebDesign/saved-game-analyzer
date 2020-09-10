@@ -3,26 +3,49 @@
 class SaveStructure {
 	file1ByteArray;
 	file2ByteArray;
-	saveStructure;
+	saveStructure = {
+		'structures': [],
+		'totalLength': '',
+		'defaultByteArray': [],
+	};
+	totalLength;
 	
+	getTotalLength() {
+		return this.totalLength;
+	}
+	
+	/** @input File with binary data. Example: FF A0 @output array, each offset is a byte, represented as an int. Example: [255, 160] */
 	addFile1(file) {
-		this.file1ByteArray = this._binaryFileToByteArray(file);
+		// this.file1ByteArray = this._binaryFileToByteArray(file);
+		let fileReader = new FileReader();
+		fileReader.readAsBinaryString(file);
+		fileReader.onload = () => {
+			let binaryData = fileReader.result;
+			let byteArray = [];
+			for (let i = 0; i < file.size; ++i) {
+				byteArray.push(binaryData.charCodeAt(i) & 0xff);
+			}
+			this.file1ByteArray = byteArray;
+		};
 	}
 	
+	/** @input File with binary data. Example: FF A0 @output array, each offset is a byte, represented as an int. Example: [255, 160] */
 	addFile2(file) {
-		this.file2ByteArray = this._binaryFileToByteArray(file);
-	}
-	
-	addString1(string) {
-		this.file1ByteArray = this._stringToByteArray(string);
-	}
-	
-	addString2(string) {
-		this.file2ByteArray = this._stringToByteArray(string);
+		// this.file2ByteArray = this._binaryFileToByteArray(file);
+		let fileReader = new FileReader();
+		fileReader.readAsBinaryString(file);
+		fileReader.onload = () => {
+			let binaryData = fileReader.result;
+			let byteArray = [];
+			for (let i = 0; i < file.size; ++i) {
+				byteArray.push(binaryData.charCodeAt(i) & 0xff);
+			}
+			this.file2ByteArray = byteArray;
+		};
 	}
 	
 	addToStructure(data) {
-		this.saveStructure.push(data);
+		this.saveStructure.structures.push(data);
 	}
 	
 	getStructure() {
@@ -38,16 +61,21 @@ class SaveStructure {
 	}
 	
 	getDiff() {
-		console.log("getDiff");
-		console.log(this.file1ByteArray);
-		console.log(this.file2ByteArray);
-		
 		if ( ! this.file1ByteArray.length || ! this.file2ByteArray.length ) {
 			return 'Error: One of your files has no data.';
 		}
 	
 		if ( this.file1ByteArray.length != this.file2ByteArray.length ) {
 			return 'Error: Your files are different sizes.';
+		}
+		
+		if ( ! this.totalLength ) {
+			this.totalLength = this.file1ByteArray.length;
+		}
+		
+		if ( this.saveStructure.defaultByteArray.length === 0 ) {
+			this.saveStructure.defaultByteArray = this.file1ByteArray;
+			this.saveStructure.totalLength = this.file1ByteArray.length;
 		}
 		
 		let len = this.file1ByteArray.length;
@@ -59,9 +87,9 @@ class SaveStructure {
 		let data = {
 			'diff': entireFileBuffer,
 			'firstOffset': offset,
-			'firstLength': '',
-			'firstType': '',
-			'firstDefault': '',
+			'firstLength': 1,
+			'firstType': 'int',
+			// 'firstDefault': '',
 			'firstRangeMin': '',
 			'firstRangeMax': '',
 		};
@@ -123,166 +151,75 @@ class SaveStructure {
 		}
 		return byteArray;
 	}
-	
-	/** @input File with binary data. Example: FF A0 @output array, each offset is a byte, represented as an int. Example: [255, 160] */
-    async _binaryFileToByteArray(file) {
-		console.log(file);
-		let fileReader = new FileReader();
-		fileReader.readAsBinaryString(file);
-		console.log(fileReader);
-		let finishedReading = new Promise(resolve => {
-			fileReader.onload = () => resolve(fileReader.result);
-		});
-		let binaryData = await finishedReading;
-		console.log(binaryData);
-		
-		let byteArray = [];
-		for (let i = 0; i < file.size; ++i) {
-			byteArray.push(binaryData.charCodeAt(i) & 0xff);
-		}
-		return byteArray;
-	}
-	
-	/*
-    _binaryFileToByteArray(file) {
-		let fileReader = new FileReaderSync();
-		fileReader.readAsBinaryString(file);
-		let binaryData = fileReader.result;
-		
-		let byteArray = [];
-		for (let i = 0; i < file.size; ++i) {
-			byteArray.push(binaryData.charCodeAt(i) & 0xff);
-		}
-		return byteArray;
-	}
-	*/
-	
-	/*
-    binaryFileToByteArray(file) {
-		let fileReader = new FileReader();
-		fileReader.readAsBinaryString(file);
-		fileReader.onloadend = function(){
-			let binaryData = fileReader.result;
-		}
-		
-		let byteArray = [];
-		for (let i = 0; i < file.size; ++i) {
-			byteArray.push(binaryData.charCodeAt(i) & 0xff);
-		}
-		return byteArray;
-	}
-	*/
-	
-	/*
-    async binaryFileToByteArray(file) {
-		let byteArray = [];
-		
-		let fileReader = new FileReader();
-		console.log(JSON.stringify(fileReader));
-		// Async sucks. I shouldn't need a complicated function for this. I'd prefer to do it synchronously.
-		let finishedReading = new Promise(resolve => {
-			console.log(JSON.stringify(fileReader));
-			console.log('---');
-			fileReader.readAsText(file);
-			fileReader.onload(() => resolve(fileReader.result));
-		});
-		let binaryData = await finishedReading;
-		
-		for (let i = 0; i < file.size; ++i) {
-			byteArray.push(binaryData.charCodeAt(i) & 0xff);
-		}
-		return byteArray;
-	}
-	*/
-}
-
-function processFiles(binary1, binary2, saveStructure) {
-	// check that both files have been selected
-	if ( ! binary1.value || ! binary2.value ) {
-		return;
-	}
-	
-	// check that both files have data
-	if ( ! binary1.files[0].size || ! binary2.files[0].size ) {
-		window.alert('Error: One of your files has no data.');
-		return;
-	}
-		
-	// make sure both files are the same size
-	if ( binary1.files[0].size !== binary2.files[0].size ) {
-		window.alert('Error: Your files are different sizes.');
-		return;
-	}
-	
-	// process files
-	console.log(binary1.files[0]);
-	saveStructure.addFile1(binary1.files[0]);
-	saveStructure.addFile2(binary2.files[0]);
-	return saveStructure.getDiff();
 }
 
 window.addEventListener('DOMContentLoaded', (e) => {
 	let binary1 = document.getElementById('binary1');
 	let binary2 = document.getElementById('binary2');
-	let binary1TextArea = document.getElementById('binary1-textarea');
-	let binary2TextArea = document.getElementById('binary2-textarea');
-	let makeDiff = document.getElementById('make-diff');
+	let makeDiffUsingFiles = document.getElementById('make-diff-using-files');
 	let diff = document.getElementById('diff');
 	let add = document.getElementById('add');
+	let offset = document.getElementById('offset');
+	let length = document.getElementById('length');
+	let type = document.getElementById('type');
+	let rangeMin = document.getElementById('range-min');
+	let rangeMax = document.getElementById('range-max');
+	let name = document.getElementById('name');
+	let notes = document.getElementById('notes');
+	let fileStructure = document.getElementById('file-structure');
 	
 	let saveStructure = new SaveStructure();
 	
 	binary1.addEventListener('change', function(e) {
-		diff.value = processFiles(binary1, binary2, saveStructure);
+		saveStructure.addFile1(binary1.files[0]);
 	});
 	
 	binary2.addEventListener('change', function(e) {
-		diff.value = processFiles(binary1, binary2, saveStructure);
+		saveStructure.addFile2(binary2.files[0]);
 	});
 	
-	makeDiff.addEventListener('click', function(e) {
-		let string1 = binary1TextArea.value;
-		let string2 = binary2TextArea.value;
-	
+	makeDiffUsingFiles.addEventListener('click', (e) => {
 		// check that both files have been selected
-		if ( ! string1 || ! string2 ) {
+		if ( ! binary1.value || ! binary2.value ) {
 			return;
 		}
 		
 		// check that both files have data
-		if ( ! string1.length || ! string2.length ) {
+		if ( ! binary1.files[0].size || ! binary2.files[0].size ) {
 			window.alert('Error: One of your files has no data.');
 			return;
 		}
-			
+		
 		// make sure both files are the same size
-		if ( string1.length !== string2.length ) {
+		if ( binary1.files[0].size !== binary2.files[0].size ) {
 			window.alert('Error: Your files are different sizes.');
 			return;
 		}
 		
 		// process files
-		saveStructure.addString1(string1);
-		saveStructure.addString2(string2);
 		let data = saveStructure.getDiff();
 		
 		diff.value = data.diff;
-		document.getElementById('offset').value = data.firstOffset;
-		document.getElementById('length').value = data.firstLength;
-		// TODO: type, firstType
-		document.getElementById('default-value').value = data.firstDefault;
-		document.getElementById('range-min').value = data.firstRangeMin;
-		document.getElementById('range-max').value = data.firstRangeMax;
-		// document.getElementById('notes').value = data.;
+		offset.value = data.firstOffset;
+		length.value = data.firstLength;
+		type.value = data.firstType;
+		rangeMin.value = data.firstRangeMin;
+		rangeMax.value = data.firstRangeMax;
 	});
 	
 	add.addEventListener('click', (e) => {
 		let data = {
-			
+			'offset': offset.value,
+			'length': length.value,
+			'type': type.value,
+			'rangeMin': rangeMin.value,
+			'rangeMax': rangeMax.value,
+			'name': name.value,
+			'notes': notes.value,
 		};
 		
 		saveStructure.addToStructure(data);
 		
-		document.getElementById('file-structure').value = saveStructure.getStructure();
+		fileStructure.value = saveStructure.getStructure();
 	});
 });
