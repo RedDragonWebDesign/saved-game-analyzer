@@ -33,14 +33,76 @@
 		</p>
 		<p>
 			<strong>Label this region?</strong><br />
-			Offset (Bytes): <input type="text" id="offset" /><br />
-			Length (Bytes): <input type="text" id="length" /><br />
-			Type: <input type="text" id="type" /><br />
-			Default Value: <input type="text" id="default-value" disabled /><br />
-			Range Min: <input type="text" id="range-max" /><br />
-			Range Max: <input type="text" id="range-min" /><br />
-			Name: <input type="text" id="name" /><br />
-			Notes: <input type="text" id="notes" /><br />
+			
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							Offset (Int):
+						</td>
+						<td>
+							<input type="text" id="offset" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Length (Int):
+						</td>
+						<td>
+							<input type="text" id="length" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Type:
+						</td>
+						<td>
+							<input type="text" id="type" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Default Value:
+						</td>
+						<td>
+							<input type="text" id="default-value" disabled />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Range Min (Hex):
+						</td>
+						<td>
+							<input type="text" id="range-max" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Range Max (Hex):
+						</td>
+						<td>
+							<input type="text" id="range-min" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Name:
+						</td>
+						<td>
+							<input type="text" id="name" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Notes:
+						</td>
+						<td>
+							<input type="text" id="notes" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
 			<button id="add">Add</button>
 		</p>
 		<p>
