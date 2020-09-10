@@ -18,3 +18,7 @@ strong {
 	font-weight: bold;
 	text-decoration: underline;
 }
+
+.file-picker {
+	display: none;
+}
