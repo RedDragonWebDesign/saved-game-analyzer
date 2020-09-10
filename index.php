@@ -10,28 +10,32 @@
 		<h1>
 			Saved Game Analyzer
 		</h1>
-		<h2>
-			Tool 1 - Diff & Structure Tool
-		</h2>
 		<p>
-			Web tool to reverse engineer saved game files. For games that use SIMPLE, BINARY saved game formats. This tool will do diffs, labeling, etc.
+			Web tool to reverse engineer saved game files. For games that use SIMPLE, BINARY saved game formats with NO CHECKSUM. This tool will do diffs, labeling, etc.
 		</p>
-		<p class="file-picker">
-			<strong>Saved Game File 1:</strong> (Hint: use drag and drop)<br />
-			<input id="binary1" type="file" name="binary1" />
+		<p>
+			Load 2 saved game files with 1 setting changed, see the diff, label the field, and it will be added to a structure. Label enough of these and you will have a fairly well mapped out saved game structure. You can then use the structure to create your own saved games.
 		</p>
-		<p class="file-picker">
-			<strong>Saved Game File 2:</strong><br />
-			<input id="binary2" type="file" name="binary2" />
-		</p>
-		<p class="file-picker">
+		<div class="two-columns">
+			<div class="fifty-percent-wide">
+				<strong>Saved Game File 1:</strong><br />
+				<span class="hint">Hint: Use Drag N Drop</span><br />
+				<input id="binary1" type="file" name="binary1" />
+			</div>
+			<div class="fifty-percent-wide">
+				<strong>Saved Game File 2:</strong><br />
+				<span class="hint">Hint: Use Drag N Drop</span><br />
+				<input id="binary2" type="file" name="binary2" />
+			</div>
+		</div>
+		<p>
 			<button id="make-diff-using-files">Make Diff</button>
 		</p>
 		<p>
 			<strong>Diff:</strong><br />
 			<textarea id="diff"></textarea>
 		</p>
-		<div class="label-this-region">
+		<div class="two-columns">
 			<div>
 				<strong>Label this region?</strong><br />
 				

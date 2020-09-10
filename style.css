@@ -27,11 +27,19 @@ input[type="text"] {
 	white-space: normal;
 }
 
-.label-this-region {
+.two-columns {
 	display: flex;
 	justify-content: space-between;
 }
 
 select {
 	width: 150px;
+}
+
+.fifty-percent-wide {
+	width: 50%;
+}
+
+.hint {
+	font-size: 10pt;
 }
